@@ -10,7 +10,7 @@ export class BadRequest extends AbstractError {
         super(message);
     }
 
-    generateErrors(): { message: string, errorCode?: string, errors?: any }[] {
+    generateErrors(): { message: string, errorCode?: string, errors?: [] }[] {
         return [{
             message: this.message,
             errorCode: this.errorCode

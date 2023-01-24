@@ -11,11 +11,11 @@ export abstract class AbstractElasticsearch {
 
     abstract mapping(): ElasticMappingInterface
 
-    abstract analyzer(): Object | null
+    abstract analyzer(): object | null
 
-    abstract filter(): Object | null
+    abstract filter(): object | null
 
-    abstract extraSettings(): Object | null
+    abstract extraSettings(): object | null
 
     private getIndexObject() {
         return {

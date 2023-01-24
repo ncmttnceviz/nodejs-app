@@ -8,5 +8,7 @@ export const mongo = async () => {
 export const mongoConnect = async () => {
     const envFields = ['MONGO_HOST', 'MONGO_USER', 'MONGO_PASS', 'MONGO_PORT'];
     appHelper.checkEnvFields(envFields);
-    await mongo().catch(() => { throw new Error('Mongodb Connection Error')})
+    return await mongo().catch(() => {
+        throw new Error('Mongodb Connection Error')
+    })
 }

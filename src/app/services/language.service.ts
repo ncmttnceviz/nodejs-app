@@ -2,7 +2,7 @@ import * as fs from "fs";
 import path from "path";
 
 export class LanguageService {
-    public lang: string = process.env.APP_LANG!
+    private lang: string = process.env.APP_LANG!
 
     trans(key: string): string {
         const file = this.getLanguageFile();
@@ -14,9 +14,9 @@ export class LanguageService {
         return '';
     }
 
-    getLanguageFile(): Map<string, string> | boolean {
+    private getLanguageFile(): Map<string, string> | boolean {
         try {
-            let file = fs.readFileSync(path.join(__dirname, `../../translations/${this.lang}.json`))
+            const file = fs.readFileSync(path.join(__dirname, `../../translations/${this.lang}.json`))
             const toString = file.toString('utf-8');
             const jsonData = JSON.parse(toString)
             return new Map(Object.entries(jsonData))

@@ -31,7 +31,6 @@ export class RabbitmqSetup {
     }
 
     private async assertQueues(channel: Channel) {
-        const exchanges = this.exchanges();
         const queues = this.proceccors();
         queues.map(async (queue) => {
             const config = queue.getConfig()
@@ -49,7 +48,7 @@ export class RabbitmqSetup {
         const channel = await this.connection.createChannel();
         processors.map((processor) => {
             const consumer = (channel: Channel) => async (msg: ConsumeMessage | null): Promise<void> => {
-                return await processor.processor(channel,msg)
+                return processor.processor(channel, msg);
             }
 
             channel.consume(processor.getConfig().queue, consumer(channel))

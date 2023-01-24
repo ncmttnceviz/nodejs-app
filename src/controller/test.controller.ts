@@ -13,7 +13,6 @@ export class TestController {
 
         //const command = queueService.sendCommand(testProcessor,cacheData);
 
-        //console.log(command)
         //const test = await redisClient.set('testKey',JSON.stringify(cacheData))
         res.status(200).json(t)
     }

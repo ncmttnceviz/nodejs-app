@@ -5,5 +5,5 @@ export abstract class AbstractError extends Error {
         super(message);
     }
 
-    abstract generateErrors() : { message: string; errorCode?:string, errors?: any }[]
+    abstract generateErrors() : { message: string; errorCode?:string, errors?: Array<object> }[]
 }

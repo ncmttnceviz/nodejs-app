@@ -13,5 +13,7 @@ export const sentry = async () => {
 
 export const sentryConnect = async () => {
     appHelper.checkEnvFields(['SENTRY_DSN', 'APP_ENV']);
-    await sentry().catch(() => { throw new Error('Sentry Connection Error')})
+    return await sentry().catch(() => {
+        throw new Error('Sentry Connection Error')
+    })
 }

@@ -8,7 +8,7 @@ export class Validation extends AbstractError {
         super('Validation Error');
     }
 
-    generateErrors(): { message: string; errors?: any }[] {
+    generateErrors(): { message: string; errors?: Array<object> }[] {
         return [{
             message: 'Validation Error',
             errors: this.getValidationErrorObject()

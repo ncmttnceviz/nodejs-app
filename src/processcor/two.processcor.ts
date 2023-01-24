@@ -5,7 +5,6 @@ import {ProcessorConfig} from "../app/services/rabbitmq/rabbitmq.interface";
 export class TwoProcesscor extends AbstractProcessor {
 
     async processor(channel: Channel, msg: ConsumeMessage) {
-        console.log(msg.content.toString() + '' + '222222')
         channel.ack(msg, true)
     }
 

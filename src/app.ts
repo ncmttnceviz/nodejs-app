@@ -1,7 +1,6 @@
 import cors from 'cors';
 import {Application, json, urlencoded} from "express";
 import {errorHandler} from "@middleware/error-handler.middleware";
-import {testRouter} from "./routes/testRouter";
 import {postgresConnect} from "@config/postgres.config";
 import {mongoConnect} from "@config/mongo.config";
 import {elasticConnect} from "@config/elastic.config";
@@ -9,6 +8,7 @@ import {sentryConnect} from "@config/sentry.config";
 import {rabbitMqConnect} from "@config/rabbitmq.config";
 import {RabbitmqSetup} from "./app/services/rabbitmq/rabbitmq.setup";
 import {redisConnection} from "@config/redis.config";
+import {routesIndex} from "./routes/index.router";
 
 export class App {
     constructor(public app: Application) {
@@ -22,7 +22,7 @@ export class App {
         app.use(urlencoded({extended: false}));
         app.use(json())
 
-        app.use(testRouter);
+        app.use(routesIndex);
         app.use(errorHandler)
     }
 
@@ -36,8 +36,8 @@ export class App {
             rabbitMqConnect(),
             redisConnection()
         ])
-        const rabbitMq = connections[4];
-        const rabbitMqSetup = new RabbitmqSetup(rabbitMq)
+
+        new RabbitmqSetup(connections[4])
     }
 
     async start() {

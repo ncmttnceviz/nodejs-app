@@ -6,10 +6,10 @@ export const elastic = new Client({
 })
 
 export const elasticConnect = async () => {
-    const envFields = ['ELASTIC_URI','ELASTIC_PORT']
+    const envFields = ['ELASTIC_URI', 'ELASTIC_PORT']
     appHelper.checkEnvFields(envFields)
-    await elastic.ping().catch(() => {
-       throw new Error('Elasticsearch Connection Error')
-   } )
+    return await elastic.ping().catch(() => {
+        throw new Error('Elasticsearch Connection Error')
+    })
 }
 
