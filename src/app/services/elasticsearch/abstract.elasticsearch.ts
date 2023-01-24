@@ -1,4 +1,4 @@
-import {ElasticMappingInterface} from "@interface/elastic.interface";
+import {ElasticMappingInterface} from "./elastic.interface";
 import {elastic} from "@config/elastic.config";
 import {Client} from "@elastic/elasticsearch";
 
@@ -64,7 +64,7 @@ export abstract class AbstractElasticsearch {
         })
     }
 
-    async update(id:string, document: object) {
+    async update(id: string, document: object) {
         return await this.client.index({
             index: this.indexName,
             refresh: true,
@@ -97,14 +97,12 @@ export abstract class AbstractElasticsearch {
         return data.length > 0 ? data[0]._source : null
     }
 
-    async query(queryParams: object, options?:object) : Promise<Array<{count: number, totalCount:number, data: Array<any>}>>{
+    async query(queryParams: object, options?: object): Promise<Array<{ count: number, totalCount: number, data: Array<any> }>> {
         const documents = await this.client.search({
             index: this.indexName,
-            query : queryParams,
+            query: queryParams,
             ...options
         })
-
-
 
         return [
             {
@@ -115,13 +113,13 @@ export abstract class AbstractElasticsearch {
         ]
     }
 
-    private getTotalCount(data: any) : number {
+    private getTotalCount(data: any): number {
         let total;
-        if (typeof data === 'object'){
+        if (typeof data === 'object') {
             total = data.value
         } else if (typeof data.total === 'number') {
-            total =data.total
-        }else {
+            total = data.total
+        } else {
             total = 0
         }
         return total;

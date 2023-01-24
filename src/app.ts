@@ -6,6 +6,9 @@ import {postgresConnect} from "@config/postgres.config";
 import {mongoConnect} from "@config/mongo.config";
 import {elasticConnect} from "@config/elastic.config";
 import {sentryConnect} from "@config/sentry.config";
+import {rabbitMqConnect} from "@config/rabbitmq.config";
+import {RabbitmqSetup} from "./app/services/rabbitmq/rabbitmq.setup";
+import {redisConnection} from "@config/redis.config";
 
 export class App {
     constructor(public app: Application) {
@@ -25,12 +28,16 @@ export class App {
 
 
     async loadConfigs() {
-        await Promise.all([
+        const connections = await Promise.all([
             postgresConnect(),
             mongoConnect(),
             elasticConnect(),
-            sentryConnect()
+            sentryConnect(),
+            rabbitMqConnect(),
+            redisConnection()
         ])
+        const rabbitMq = connections[4];
+        const rabbitMqSetup = new RabbitmqSetup(rabbitMq)
     }
 
     async start() {

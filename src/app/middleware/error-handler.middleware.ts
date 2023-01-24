@@ -13,7 +13,7 @@ export const errorHandler = (error: Error, req: Request, res: Response, next: Ne
         trace: error.stack
     } : {message: 'Something Went Wrong'};
 
-    Sentry.captureException(error);
+    if (process.env.APP_ENV === 'prod') Sentry.captureException(errorData);
     res.status(500).json(errorData)
 }
 
