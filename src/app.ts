@@ -9,6 +9,7 @@ import {rabbitMqConnect} from "@config/rabbitmq.config";
 import {RabbitmqSetup} from "./app/services/rabbitmq/rabbitmq.setup";
 import {redisConnection} from "@config/redis.config";
 import {routesIndex} from "./routes/index.router";
+import fileUpload from 'express-fileupload'
 
 export class App {
     constructor(public app: Application) {
@@ -21,6 +22,11 @@ export class App {
 
         app.use(urlencoded({extended: false}));
         app.use(json())
+        app.use(fileUpload({
+            createParentPath: true,
+            useTempFiles : true ,
+            tempFileDir : '/tmp/'
+        }))
 
         app.use(routesIndex);
         app.use(errorHandler)
