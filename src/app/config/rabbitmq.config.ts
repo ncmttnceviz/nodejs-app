@@ -7,7 +7,7 @@ const rabbitMq: () => Promise<Connection> = async () => {
 }
 
 export const rabbitMqConnect = async () => {
-    appHelper.checkEnvFields(['RABBITMQ_HOST', 'RABBITMQ_PORT', 'RABBITMQ_USER', 'RABBITMQ_PASS']);
+    appHelper.checkEnvFields(['RABBITMQ_HOST', 'RABBITMQ_PORT', 'RABBITMQ_USER', 'RABBITMQ_PASS','QUEUE_PREFIX']);
     return await rabbitMq().catch(() => {
         throw new Error('RabbitMq Connection Error')
     })

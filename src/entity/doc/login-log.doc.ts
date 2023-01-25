@@ -3,7 +3,7 @@ import {model, Schema} from "mongoose";
 export class LoginLogDoc {
     userId: string
     ip: string
-    loginDate: string
+    loginDate: Date
     status: boolean
 }
 
@@ -17,7 +17,7 @@ const schema = new Schema<LoginLogDoc>({
         required: true
     },
     loginDate: {
-        type: String,
+        type: Date,
         required: true
     },
     status: {

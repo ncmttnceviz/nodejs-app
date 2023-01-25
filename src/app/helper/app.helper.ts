@@ -8,7 +8,7 @@ export class AppHelper {
     }
 
     reformatDate(date: Date): string {
-        return date.getFullYear() + '-' + (date.getMonth() < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + '-' + date.getMinutes()
+        return date.toISOString().split('T')[0] + ' ' + date.getUTCHours() + ':' + date.getUTCMinutes();
     }
 }
 

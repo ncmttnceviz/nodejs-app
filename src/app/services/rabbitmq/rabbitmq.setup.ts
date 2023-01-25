@@ -33,8 +33,10 @@ export class RabbitmqSetup {
         queues.map(async (queue) => {
             const config = queue.getConfig()
             try {
-                await channel.assertQueue(config.queue, config.config)
-                await channel.bindQueue(config.queue, config.exchange, config.routingKey)
+                const queue = process.env.APP_ENV === 'dev' ? 'dev:' + config.queue : config.queue
+                const routingKey = process.env.APP_ENV === 'dev' ? 'dev:' + config.routingKey : config.routingKey
+                await channel.assertQueue(queue, config.config)
+                await channel.bindQueue(queue, config.exchange, routingKey)
             } catch (err) {
                 throw err
             }
@@ -42,15 +44,17 @@ export class RabbitmqSetup {
     }
 
     private async consumeQues() {
-        const processors = this.proceccors();
-        const channel = await this.connection.createChannel();
-        processors.map((processor) => {
-            const consumer = (channel: Channel) => async (msg: ConsumeMessage | null): Promise<void> => {
-                return processor.processor(channel, msg);
-            }
-
-            channel.consume(processor.getConfig().queue, consumer(channel))
-        })
+        setTimeout(async () => {
+            const processors = this.proceccors();
+            const channel = await this.connection.createChannel();
+            processors.map((processor) => {
+                const consumer = (channel: Channel) => async (msg: ConsumeMessage | null): Promise<void> => {
+                    return processor.processor(channel, msg);
+                }
+                const queue = process.env.APP_ENV === 'dev' ? 'dev:' + processor.getConfig().queue : processor.getConfig().queue;
+                channel.consume(queue, consumer(channel))
+            })
+        }, 1000)
     }
 
     private exchanges(): Array<ExchangeConfig> {
