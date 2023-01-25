@@ -4,11 +4,16 @@ export class AuthUserResponse {
     private lastname: string
     private registrationDate: string
     private accessToken: string
+    private lastFailLogin: string | null
 
     setId(id: string): this {
         this.id = id
 
         return this;
+    }
+
+    getId(): string {
+        return this.id
     }
 
     setFirstName(firstName: string): this {
@@ -31,6 +36,12 @@ export class AuthUserResponse {
 
     setAccessToken(token: string): this {
         this.accessToken = token;
+
+        return this;
+    }
+
+    setLastFailLogin(date: string | null): this {
+        this.lastFailLogin = date
 
         return this;
     }

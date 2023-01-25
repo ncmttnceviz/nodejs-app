@@ -1,22 +1,20 @@
 import {ExchangeConfig} from "./rabbitmq.interface";
 import {AbstractProcessor} from "./abstract.processcor";
-import {testProcessor} from "../../../processcor/test.processcor";
 import {Channel, Connection, ConsumeMessage,} from "amqplib";
-import {twoProcesscor} from "../../../processcor/two.processcor";
+import {userLogProcessor} from "../../../processcor/user-log.processor";
 
 export class RabbitmqSetup {
 
     constructor(public connection: Connection) {
         this.init();
     }
-    async init(){
+
+    async init() {
         const channel = await this.connection.createChannel();
 
-        await Promise.all([
-            this.assertExchanges(channel),
-            this.assertQueues(channel),
-            this.consumeQues(),
-        ])
+        await this.assertExchanges(channel)
+        await this.assertQueues(channel)
+        await this.consumeQues()
     }
 
     private async assertExchanges(channel: Channel) {
@@ -24,7 +22,7 @@ export class RabbitmqSetup {
         exchanges.map(async (exchange: ExchangeConfig) => {
             try {
                 await channel.assertExchange(exchange.name, exchange.type, exchange.config)
-            }catch (err){
+            } catch (err) {
                 throw err;
             }
         })
@@ -35,9 +33,9 @@ export class RabbitmqSetup {
         queues.map(async (queue) => {
             const config = queue.getConfig()
             try {
-                await channel.assertQueue(config.queue,config.config)
-                await channel.bindQueue(config.queue,config.exchange,config.routingKey)
-            }catch (err){
+                await channel.assertQueue(config.queue, config.config)
+                await channel.bindQueue(config.queue, config.exchange, config.routingKey)
+            } catch (err) {
                 throw err
             }
         })
@@ -60,7 +58,7 @@ export class RabbitmqSetup {
             {
                 type: 'direct',
                 name: 'direct_exchange',
-                config:{
+                config: {
                     autoDelete: false,
                     durable: true,
                     internal: false
@@ -69,7 +67,7 @@ export class RabbitmqSetup {
             {
                 type: 'fanout',
                 name: 'fanout_exchange',
-                config:{
+                config: {
                     autoDelete: false,
                     durable: true,
                     internal: false
@@ -78,10 +76,9 @@ export class RabbitmqSetup {
         ]
     }
 
-    private proceccors(): Array<AbstractProcessor>{
+    private proceccors(): Array<AbstractProcessor> {
         return [
-            testProcessor,
-            twoProcesscor
+            userLogProcessor
         ]
     }
 }

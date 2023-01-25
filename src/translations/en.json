@@ -1,5 +1,6 @@
 {
   "userExist": "this user already exists",
   "wrongPassword": "Please check your password",
-  "requireAuth": "Please login to continue"
+  "requireAuth": "Please login to continue",
+  "tooManyRequest": "You made too many requests. Please try again later"
 }

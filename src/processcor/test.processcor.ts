@@ -5,6 +5,7 @@ import {Channel, ConsumeMessage} from "amqplib";
 export class TestProcessor extends AbstractProcessor {
 
     async processor(channel: Channel, msg: ConsumeMessage) {
+        console.log(msg.content.toString() + '' + '111111')
         channel.ack(msg, true)
     }
 

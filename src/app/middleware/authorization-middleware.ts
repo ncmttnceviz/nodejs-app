@@ -4,7 +4,7 @@ import {JwtPayload} from 'jsonwebtoken';
 import {AuthorizationError} from "@error/authorization.error";
 
 export const authorizationMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    let accessToken = req.headers.authorization
+    const accessToken = req.headers.authorization
 
     if (typeof accessToken === 'string') {
         const token = accessToken.split(' ')
