@@ -1,7 +1,7 @@
 import {ExchangeConfig} from "./rabbitmq.interface";
 import {AbstractProcessor} from "./abstract.processcor";
 import {Channel, Connection, ConsumeMessage,} from "amqplib";
-import {userLogProcessor} from "../../../processcor/user-log.processor";
+import {userLogProcessor} from "../../../processor/user-log.processor";
 
 export class RabbitmqSetup {
 
@@ -29,7 +29,7 @@ export class RabbitmqSetup {
     }
 
     private async assertQueues(channel: Channel) {
-        const queues = this.proceccors();
+        const queues = this.processors();
         queues.map(async (queue) => {
             const config = queue.getConfig()
             try {
@@ -45,11 +45,11 @@ export class RabbitmqSetup {
 
     private async consumeQues() {
         setTimeout(async () => {
-            const processors = this.proceccors();
+            const processors = this.processors();
             const channel = await this.connection.createChannel();
             processors.map((processor) => {
                 const consumer = (channel: Channel) => async (msg: ConsumeMessage | null): Promise<void> => {
-                    return processor.processor(channel, msg);
+                    if (msg) return processor.processor(channel, msg);
                 }
                 const queue = process.env.APP_ENV === 'dev' ? 'dev:' + processor.getConfig().queue : processor.getConfig().queue;
                 channel.consume(queue, consumer(channel))
@@ -80,7 +80,7 @@ export class RabbitmqSetup {
         ]
     }
 
-    private proceccors(): Array<AbstractProcessor> {
+    private processors(): Array<AbstractProcessor> {
         return [
             userLogProcessor
         ]

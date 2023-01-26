@@ -4,9 +4,10 @@ import {validateSync} from "class-validator";
 import {Validation} from "@error/validation.error";
 import {authService} from "@service/auth.service";
 import {BadRequest} from "@error/bad-request.error";
-import {languageService} from "../app/services/language.service";
-import {queueService} from "../app/services/queue.service";
-import {userLogProcessor} from "../processcor/user-log.processor";
+import {languageService} from "@app/services/language.service";
+import {queueService} from "@app/services/queue.service";
+import {userLogProcessor} from "@processor/user-log.processor";
+
 
 export class AuthController {
 
@@ -61,10 +62,6 @@ export class AuthController {
         })
 
         res.status(200).json(user)
-    }
-
-    async me(req: Request, res: Response, next: NextFunction) {
-        console.log(req.user?.email)
     }
 
 }

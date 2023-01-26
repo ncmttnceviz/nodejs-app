@@ -6,11 +6,9 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint . --ext .ts",
-    "lint-and-fix": "eslint . --ext .ts --fix",
     "compile": "tsc && node dist/src/main.js",
     "copy-files": "cp -r ./src/translations  ./dist/src",
-    "start": "node_modules/.bin/nodemon -e ts --exec \"npm run compile\"",
-    "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ./src/app/config/postgres.config.ts"
+    "start": "node_modules/.bin/nodemon -e ts --exec \"npm run compile\""
   },
   "devDependencies": {
     "@types/amqplib": "^0.10.1",
@@ -51,6 +49,7 @@
     "typeorm": "^0.3.11"
   },
   "_moduleAliases": {
+    "@app": "./dist/src/app/",
     "@config": "./dist/src/app/config",
     "@error": "./dist/src/app/error",
     "@interface": "./dist/src/app/interface",
@@ -60,6 +59,7 @@
     "@dto": "./dist/src/dto",
     "@entity": "./dist/src/entity",
     "@repository": "./dist/src/repository",
+    "@processor": "./dist/src/processor",
     "@helper": "./dist/src/app/helper"
   }
 }

@@ -1,5 +1,5 @@
-import {AbstractProcessor} from "../app/services/rabbitmq/abstract.processcor";
-import {ProcessorConfig} from "../app/services/rabbitmq/rabbitmq.interface";
+import {AbstractProcessor} from "@app/services/rabbitmq/abstract.processcor";
+import {ProcessorConfig} from "@app/services/rabbitmq/rabbitmq.interface";
 import {Channel, ConsumeMessage} from "amqplib";
 import {LoginLogDoc} from "@entity/doc/login-log.doc";
 import {userLogService} from "@service/user-log.service";

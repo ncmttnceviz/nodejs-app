@@ -12,7 +12,7 @@ export const userRepository = postgres.getRepository(UserEntity).extend({
 
         return await this.save(entity);
     },
-    async findByEmail(email: string) : Promise<UserEntity | null> {
+    async findByEmail(email: string): Promise<UserEntity | null> {
         return await this.findOneBy({email: email})
     }
 })

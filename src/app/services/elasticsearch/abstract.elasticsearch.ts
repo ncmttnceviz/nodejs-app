@@ -4,6 +4,7 @@ import {Client} from "@elastic/elasticsearch";
 
 
 export abstract class AbstractElasticsearch {
+
     constructor(private client: Client = elastic) {
     }
 

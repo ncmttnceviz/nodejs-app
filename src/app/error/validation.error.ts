@@ -4,13 +4,13 @@ import {ValidationError} from "class-validator";
 export class Validation extends AbstractError {
     statusCode = 422;
 
-    constructor(public errorData: ValidationError[]) {
-        super('Validation Error');
+    constructor(public errorData: ValidationError[], public message = 'Validation Error') {
+        super(message);
     }
 
     generateErrors(): { message: string; errors?: Array<object> }[] {
         return [{
-            message: 'Validation Error',
+            message: this.message,
             errors: this.getValidationErrorObject()
         }];
     }

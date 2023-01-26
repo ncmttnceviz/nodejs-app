@@ -4,12 +4,13 @@ import {JwtPayload} from 'jsonwebtoken';
 import {AuthorizationError} from "@error/authorization.error";
 
 export const authorizationMiddleware = (req: Request, res: Response, next: NextFunction) => {
+
     const accessToken = req.headers.authorization
 
     if (typeof accessToken === 'string') {
-        const token = accessToken.split(' ')
+        const token = accessToken.replace('Bearer ', '')
         try {
-            req.user = jwt.verify(token[1], process.env.JWT_KEY!) as JwtPayload
+            req.user = jwt.verify(token, process.env.JWT_KEY!) as JwtPayload
             return next()
         } catch (e) {
             return next(new AuthorizationError())

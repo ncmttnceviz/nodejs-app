@@ -5,10 +5,10 @@ import {randomBytes, scrypt} from "crypto";
 import {promisify} from 'util';
 import {JwtPayloadInterface} from "@interface/Jwt-payload.interface";
 import {BadRequest} from "@error/bad-request.error";
-import {languageService} from "../app/services/language.service";
+import {languageService} from "@app/services/language.service";
 import {AuthUserResponse} from "../response/auth-user.response";
-import {queueService} from "../app/services/queue.service";
-import {userLogProcessor} from "../processcor/user-log.processor";
+import {queueService} from "@app/services/queue.service";
+import {userLogProcessor} from "@processor/user-log.processor";
 import {userLogService} from "@service/user-log.service";
 import {appHelper} from "@helper/app.helper";
 

@@ -2,6 +2,7 @@ import {UploadedFile} from "express-fileupload";
 import path from "path";
 
 export class FileUploader {
+
     uploadSingleFile(file: UploadedFile, directory: string): string {
         const time = new Date().getTime() + Math.floor((Math.random() * 1000) + 9999);
         const ext = file.mimetype.split('/')[1]

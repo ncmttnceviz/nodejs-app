@@ -6,7 +6,7 @@ import {mongoConnect} from "@config/mongo.config";
 import {elasticConnect} from "@config/elastic.config";
 import {sentryConnect} from "@config/sentry.config";
 import {rabbitMqConnect} from "@config/rabbitmq.config";
-import {RabbitmqSetup} from "./app/services/rabbitmq/rabbitmq.setup";
+import {RabbitmqSetup} from "@app/services/rabbitmq/rabbitmq.setup";
 import {redisConnection} from "@config/redis.config";
 import {routesIndex} from "./routes/index.router";
 import fileUpload from 'express-fileupload'
