@@ -7,6 +7,7 @@ import {BadRequest} from "@error/bad-request.error";
 import {languageService} from "@app/services/language.service";
 import {queueService} from "@app/services/queue.service";
 import {userLogProcessor} from "@processor/user-log.processor";
+import {BasicResponse} from "../response/basic-response.response";
 
 
 export class AuthController {
@@ -29,7 +30,12 @@ export class AuthController {
 
         try {
             const user = await authService.createUser(registerDto);
-            res.status(200).json(user)
+            const response = new BasicResponse()
+                .setStatusCode(201)
+                .setMessage(languageService.trans('registerSuccess'))
+                .setData(user)
+
+            res.sendData(response)
         } catch (e) {
             return next(e)
         }
@@ -47,21 +53,36 @@ export class AuthController {
 
         if (!await authService.checkUser(loginDto.email)) return next(new BadRequest(languageService.trans('userNotFound'), 'ACFL1'))
 
-        const user = await authService.loginUser(loginDto, req.ip).catch((e) => {
+        try {
+            const user = await authService.loginUser(loginDto, req.ip)
+
+            queueService.sendCommand(userLogProcessor, {
+                type: 'user_login_log',
+                data: {
+                    ip: req.ip,
+                    userId: user?.getId(),
+                    loginDate: new Date(),
+                    status: true
+                }
+            })
+
+            const response = new BasicResponse()
+                .setMessage(languageService.trans('loginSuccess'))
+                .setData(user)
+
+            res.sendData(response)
+        } catch (e) {
             return next(e)
-        });
+        }
+    }
 
-        queueService.sendCommand(userLogProcessor, {
-            type: 'user_login_log',
-            data: {
-                ip: req.ip,
-                userId: user?.getId(),
-                loginDate: new Date(),
-                status: true
-            }
-        })
-
-        res.status(200).json(user)
+    async logout(req: Request, res: Response, next: NextFunction) {
+        await authService.logoutUser(req.user?.userId)
+            .then(() => {
+                res.sendData(new BasicResponse().setMessage(languageService.trans('successLogout')))
+            }).catch((e) => {
+                return next(e)
+            })
     }
 
 }

@@ -1,7 +1,7 @@
 import {ExchangeConfig} from "./rabbitmq.interface";
 import {AbstractProcessor} from "./abstract.processcor";
 import {Channel, Connection, ConsumeMessage,} from "amqplib";
-import {userLogProcessor} from "../../../processor/user-log.processor";
+import {userLogProcessor} from "@processor/user-log.processor";
 
 export class RabbitmqSetup {
 

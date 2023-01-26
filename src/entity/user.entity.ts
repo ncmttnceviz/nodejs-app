@@ -1,7 +1,8 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn, JoinColumn} from "typeorm";
+import {UserTokenEntity} from "@entity/user-token.entity";
 
 @Entity({name: 'users'})
-class UserEntity{
+class UserEntity {
 
     @PrimaryGeneratedColumn('uuid')
     id: string
@@ -23,6 +24,10 @@ class UserEntity{
 
     @Column({type: "timestamp"})
     updatedAt: string
+
+    @OneToMany(() => UserTokenEntity, (userToken) => userToken.user)
+    @JoinColumn()
+    tokens: UserTokenEntity[]
 }
 
 export default UserEntity;

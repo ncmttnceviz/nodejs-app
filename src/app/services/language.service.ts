@@ -8,10 +8,10 @@ export class LanguageService {
         const file = this.getLanguageFile();
         if (file instanceof Map) {
             const value = file.get(key);
-            if (typeof value === 'undefined') return '';
+            if (typeof value === 'undefined') return key;
             return value;
         }
-        return '';
+        return key;
     }
 
     private getLanguageFile(): Map<string, string> | boolean {

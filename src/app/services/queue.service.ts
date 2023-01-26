@@ -9,7 +9,8 @@ export class QueueService {
         const channel: Channel = await connection.createChannel();
         const config = queue.getConfig();
 
-        return channel.publish(config.exchange, config.routingKey, Buffer.from(JSON.stringify(message)))
+        const routingKey = process.env.APP_ENV === 'dev' ? 'dev:' + config.routingKey : config.routingKey;
+        return channel.publish(config.exchange, routingKey, Buffer.from(JSON.stringify(message)))
     }
 
 }

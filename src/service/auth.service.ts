@@ -11,6 +11,7 @@ import {queueService} from "@app/services/queue.service";
 import {userLogProcessor} from "@processor/user-log.processor";
 import {userLogService} from "@service/user-log.service";
 import {appHelper} from "@helper/app.helper";
+import {userTokenRepository} from "@repository/user-token.repository";
 
 const scryptAsync = promisify(scrypt)
 
@@ -40,7 +41,14 @@ class AuthService {
             throw new BadRequest(languageService.trans('wrongPassword'), 'ASFL1')
         }
 
-        const jwt = this.generateJwt({email: user?.email!, username: user?.firstname + '' + user?.lastname})
+        const jwt = this.generateJwt({
+            email: user?.email!,
+            username: user?.firstname + '' + user?.lastname,
+            userId: user?.id!
+        })
+        const today = new Date();
+        const tokenExpireDate = new Date(today.setMonth(1));
+        await userTokenRepository.createToken({userId: user?.id!, token: jwt, expireDate: tokenExpireDate})
         const lastFailLogin = await userLogService.getLastFailLoginByUser(user?.id!)
 
         return (new AuthUserResponse())
@@ -52,8 +60,14 @@ class AuthService {
             .setLastFailLogin(lastFailLogin?.toString() ? appHelper.reformatDate(new Date(lastFailLogin?.toString()!)) : null)
     }
 
+    async logoutUser(userId: string): Promise<boolean> {
+        return !!(await userTokenRepository.deleteTokensByEmail(userId));
+    }
+
     generateJwt(payload: JwtPayloadInterface): string {
-        return jwt.sign(payload, process.env.JWT_KEY!)
+        return jwt.sign(payload, process.env.JWT_KEY!, {
+            expiresIn: 60 * 60 * 24 * 30
+        })
     }
 
     private async hashPassword(password: string): Promise<string> {
