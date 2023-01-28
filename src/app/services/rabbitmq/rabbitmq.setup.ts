@@ -2,6 +2,7 @@ import {ExchangeConfig} from "./rabbitmq.interface";
 import {AbstractProcessor} from "./abstract.processcor";
 import {Channel, Connection, ConsumeMessage,} from "amqplib";
 import {userLogProcessor} from "@processor/user-log.processor";
+import {sendEmailProcessor} from "@processor/send-email.processor";
 
 export class RabbitmqSetup {
 
@@ -82,7 +83,8 @@ export class RabbitmqSetup {
 
     private processors(): Array<AbstractProcessor> {
         return [
-            userLogProcessor
+            userLogProcessor,
+            sendEmailProcessor
         ]
     }
 }

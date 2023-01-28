@@ -12,6 +12,10 @@ import {userLogProcessor} from "@processor/user-log.processor";
 import {userLogService} from "@service/user-log.service";
 import {appHelper} from "@helper/app.helper";
 import {userTokenRepository} from "@repository/user-token.repository";
+import UserEntity from "@entity/user.entity";
+import {MailInterface} from "@interface/mail.interface";
+import {mailerService} from "@app/services/mailer.service";
+import {verificationCodeRepository} from "@repository/verification-code.repository";
 
 const scryptAsync = promisify(scrypt)
 
@@ -23,7 +27,9 @@ class AuthService {
 
     async createUser(registerDto: RegisterDto) {
         registerDto.password = await this.hashPassword(registerDto.password);
-        return await userRepository.createUser(registerDto);
+        const user = await userRepository.createUser(registerDto)
+        await verificationCodeRepository.createCode(user, 'email', appHelper.generateString(6))
+        return user;
     }
 
     async loginUser(loginDto: LoginDto, ip: string): Promise<AuthUserResponse> {
@@ -58,6 +64,23 @@ class AuthService {
             .setRegistrationDate(appHelper.reformatDate(new Date(user?.createdAt!)))
             .setAccessToken(jwt)
             .setLastFailLogin(lastFailLogin?.toString() ? appHelper.reformatDate(new Date(lastFailLogin?.toString()!)) : null)
+    }
+
+    async sendVerificationEmail(userId: string): Promise<boolean> {
+        const user = await userRepository.getUserWithVerificationCode(userId)
+
+        if (user instanceof UserEntity) {
+            const data: MailInterface = {
+                from: process.env.MAIL_FROM!,
+                to: user.email,
+                subject: languageService.trans('verificationMail'),
+                text: languageService.trans('verificationCode') + '' + user.verificationCode.code
+            }
+
+            return mailerService.sendMail(data)
+        }
+
+        return false
     }
 
     async logoutUser(userId: string): Promise<boolean> {

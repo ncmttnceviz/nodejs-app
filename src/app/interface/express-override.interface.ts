@@ -1,5 +1,5 @@
 import {JwtPayload} from "jsonwebtoken";
-import {AbstractResponse} from "../../response/AbstractResponse.response";
+import {ResponseOrganizer} from "@app/services/response-organizer.service";
 
 declare global {
     namespace Express {
@@ -8,7 +8,7 @@ declare global {
         }
 
         interface Response {
-            sendData(data: AbstractResponse): any
+            sendData(data: ResponseOrganizer): any
         }
     }
 }

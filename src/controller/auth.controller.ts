@@ -7,7 +7,8 @@ import {BadRequest} from "@error/bad-request.error";
 import {languageService} from "@app/services/language.service";
 import {queueService} from "@app/services/queue.service";
 import {userLogProcessor} from "@processor/user-log.processor";
-import {BasicResponse} from "../response/basic-response.response";
+import {ResponseOrganizer} from "@app/services/response-organizer.service";
+import {sendEmailProcessor} from "@processor/send-email.processor";
 
 
 export class AuthController {
@@ -30,7 +31,15 @@ export class AuthController {
 
         try {
             const user = await authService.createUser(registerDto);
-            const response = new BasicResponse()
+
+            queueService.sendCommand(sendEmailProcessor, {
+                type: 'verification_email',
+                message: {
+                    userId: user.id
+                }
+            })
+
+            const response = new ResponseOrganizer()
                 .setStatusCode(201)
                 .setMessage(languageService.trans('registerSuccess'))
                 .setData(user)
@@ -66,7 +75,7 @@ export class AuthController {
                 }
             })
 
-            const response = new BasicResponse()
+            const response = new ResponseOrganizer()
                 .setMessage(languageService.trans('loginSuccess'))
                 .setData(user)
 
@@ -79,7 +88,7 @@ export class AuthController {
     async logout(req: Request, res: Response, next: NextFunction) {
         await authService.logoutUser(req.user?.userId)
             .then(() => {
-                res.sendData(new BasicResponse().setMessage(languageService.trans('successLogout')))
+                res.sendData(new ResponseOrganizer().setMessage(languageService.trans('successLogout')))
             }).catch((e) => {
                 return next(e)
             })

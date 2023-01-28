@@ -14,5 +14,12 @@ export const userRepository = postgres.getRepository(UserEntity).extend({
     },
     async findByEmail(email: string): Promise<UserEntity | null> {
         return await this.findOneBy({email: email})
+    },
+    async getUserWithVerificationCode(userId: string): Promise<UserEntity | null> {
+        return await this.createQueryBuilder('u')
+            .where('u.id=:userId', {userId: userId})
+            .leftJoinAndSelect('u.verificationCode', 'v')
+            .select(['u.email', 'v.code'])
+            .getOne()
     }
 })

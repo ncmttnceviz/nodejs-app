@@ -15,6 +15,6 @@ export class UserTokenEntity {
     @Column({type: "timestamp"})
     expireDate: Date
 
-    @ManyToOne(() => UserEntity, user => user.tokens)
+    @ManyToOne(() => UserEntity, (user) => user.tokens)
     user: UserEntity
 }

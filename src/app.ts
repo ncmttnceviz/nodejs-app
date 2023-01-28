@@ -1,5 +1,5 @@
 import cors from 'cors';
-import {Application, json, response, urlencoded} from "express";
+import {Application, json, urlencoded} from "express";
 import {errorHandler} from "@middleware/error-handler.middleware";
 import {postgresConnect} from "@config/postgres.config";
 import {mongoConnect} from "@config/mongo.config";
@@ -10,7 +10,6 @@ import {RabbitmqSetup} from "@app/services/rabbitmq/rabbitmq.setup";
 import {redisConnection} from "@config/redis.config";
 import {routesIndex} from "./routes/index.router";
 import fileUpload from 'express-fileupload'
-import {AbstractResponse} from "./response/AbstractResponse.response";
 import {responseOrganizerMiddleware} from "@middleware/response-organizer.middleware";
 
 export class App {
