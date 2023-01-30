@@ -15,6 +15,7 @@ export const userTokenRepository = postgres.getRepository(UserTokenEntity).exten
         return this.createQueryBuilder('t')
             .select('t.expireDate')
             .where('t.token =:token', {token: token})
+            .cache(true)
             .getOne()
     },
     async deleteTokensByEmail(userId: string): Promise<DeleteResult> {

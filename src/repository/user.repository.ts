@@ -15,7 +15,10 @@ export const userRepository = postgres.getRepository(UserEntity).extend({
         return await this.save(entity);
     },
     async findByEmail(email: string): Promise<UserEntity | null> {
-        return await this.findOneBy({email: email})
+        return await this.createQueryBuilder('u')
+            .where('email=:email',{email: email})
+            .cache(true)
+            .getOne()
     },
     async getUserWithVerificationCode(userId: string): Promise<{email: string, code: string} | null | undefined> {
         return await this.createQueryBuilder('u')
