@@ -19,8 +19,7 @@ export class Validation extends AbstractError {
         return this.errorData.map((error) => {
             let errorObj: { key: string, message: string };
             const messages = Object.values(error.constraints!);
-            errorObj = {key: error.property, message: messages[0]}
-            return errorObj;
+            return  {key: error.property, message: messages[0]}
         })
     }
 }

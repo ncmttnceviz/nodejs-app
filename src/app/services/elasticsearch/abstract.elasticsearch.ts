@@ -32,7 +32,7 @@ export abstract class AbstractElasticsearch {
     }
 
     private getIndexSetting() {
-        const map = new Map<string, {}>();
+        const map = new Map<string, object>();
         if (typeof this.analyzer() === 'object') {
             map.set('analysis', this.analyzer()!)
         }

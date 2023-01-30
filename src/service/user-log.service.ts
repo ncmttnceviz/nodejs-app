@@ -5,7 +5,7 @@ class UserLogService {
         return await new loginLogDocument({...data}).save();
     }
 
-    async getLastFailLoginByUser(userId: string): Promise<String | null> {
+    async getLastFailLoginByUser(userId: string): Promise<string | null> {
         const doc = await loginLogDocument.findOne({userId: userId, status: false}, {
             loginDate: 1
         })

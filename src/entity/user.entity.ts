@@ -1,4 +1,4 @@
-import {Column, Entity, OneToMany, PrimaryGeneratedColumn, JoinColumn, OneToOne} from "typeorm";
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn, JoinColumn} from "typeorm";
 import {UserTokenEntity} from "@entity/user-token.entity";
 
 @Entity({name: 'users'})

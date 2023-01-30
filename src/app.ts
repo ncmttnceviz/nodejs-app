@@ -11,7 +11,6 @@ import {redisConnection} from "@config/redis.config";
 import {routesIndex} from "./routes/index.router";
 import fileUpload from 'express-fileupload'
 import {responseOrganizerMiddleware} from "@middleware/response-organizer.middleware";
-import {userRepository} from "@repository/user.repository";
 
 export class App {
     constructor(public app: Application) {
@@ -33,8 +32,6 @@ export class App {
 
         app.use(routesIndex);
         app.use(errorHandler)
-
-        process.env.TZ = 'Europe/Istanbul'
     }
 
 
