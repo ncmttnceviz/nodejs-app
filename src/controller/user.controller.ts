@@ -9,15 +9,14 @@ class UserController {
         const {code} = req.body;
         if (!code) return next(new BadRequest(languageService.trans('verifyCodeRequired'), 'UCFVE1'))
 
-        await userService.verifyUser(code)
-            .then(() => {
-                const response = new ResponseOrganizer()
-                    .setMessage(languageService.trans('emailVerificationSuccess'));
-                res.sendData(response)
-            })
-            .catch((err) => {
-                return next(err)
-            })
+        try {
+            await userService.verifyUser(code)
+        } catch (err) {
+            return next(err)
+        }
+
+        const response = new ResponseOrganizer().setMessage(languageService.trans('emailVerificationSuccess'));
+        res.sendData(response)
     }
 }
 
