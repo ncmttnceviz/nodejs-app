@@ -11,6 +11,7 @@ import {redisConnection} from "@config/redis.config";
 import {routesIndex} from "./routes/index.router";
 import fileUpload from 'express-fileupload'
 import {responseOrganizerMiddleware} from "@middleware/response-organizer.middleware";
+import {userRepository} from "@repository/user.repository";
 
 export class App {
     constructor(public app: Application) {
@@ -54,5 +55,8 @@ export class App {
         this.app.listen(port, () => {
             console.log(`Server Running : http://localhost:${port}`)
         })
+
+       const user = await userRepository.getUserWithVerificationCode('8df217ec-b94d-4d1a-bf61-07d8c47bb2b4')
+        console.log(user)
     }
 }

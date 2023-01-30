@@ -28,7 +28,9 @@ class AuthService {
     async createUser(registerDto: RegisterDto) {
         registerDto.password = await this.hashPassword(registerDto.password);
         const user = await userRepository.createUser(registerDto)
-        await verificationCodeRepository.createCode(user, 'email', appHelper.generateString(6))
+        const now = new Date();
+        const expireDate = new Date(now.setMinutes(5))
+        await verificationCodeRepository.createCode(user, 'email', appHelper.generateString(6), expireDate)
         return user;
     }
 
@@ -68,13 +70,14 @@ class AuthService {
 
     async sendVerificationEmail(userId: string): Promise<boolean> {
         const user = await userRepository.getUserWithVerificationCode(userId)
+        console.log(user)
 
-        if (user instanceof UserEntity) {
+        if (user ) {
             const data: MailInterface = {
                 from: process.env.MAIL_FROM!,
                 to: user.email,
                 subject: languageService.trans('verificationMail'),
-                text: languageService.trans('verificationCode') + '' + user.verificationCode.code
+                text: languageService.trans('verificationCode') + '' + 'user.verificationCode.code'
             }
 
             return mailerService.sendMail(data)

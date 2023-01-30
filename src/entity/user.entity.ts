@@ -1,6 +1,5 @@
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn, JoinColumn, OneToOne} from "typeorm";
 import {UserTokenEntity} from "@entity/user-token.entity";
-import {VerificationCodeEntity} from "@entity/verification-code.entity";
 
 @Entity({name: 'users'})
 class UserEntity {
@@ -23,22 +22,15 @@ class UserEntity {
     @Column({type: "boolean", default: false})
     isVerified: boolean
 
-    @Column({type: "timestamp"})
+    @Column({type: "timestamp", default: () => 'CURRENT_TIMESTAMP'})
     createdAt: string
 
-    @Column({type: "timestamp"})
+    @Column({type: "timestamp", default: null})
     updatedAt: string
 
     @OneToMany(() => UserTokenEntity, (userToken) => userToken.user)
     @JoinColumn()
     tokens: UserTokenEntity[]
-
-    @OneToOne(() => VerificationCodeEntity)
-    @JoinColumn({
-        name: 'id',
-        referencedColumnName: 'userId',
-    })
-    verificationCode: VerificationCodeEntity
 }
 
 export default UserEntity;

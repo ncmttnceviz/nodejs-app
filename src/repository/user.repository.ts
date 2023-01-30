@@ -1,6 +1,8 @@
 import {postgres} from "@config/postgres.config";
 import UserEntity from "@entity/user.entity";
 import {RegisterDto} from "@dto/auth.dto";
+import {VerificationCodeEntity} from "@entity/verification-code.entity";
+import {UpdateResult} from "typeorm";
 
 export const userRepository = postgres.getRepository(UserEntity).extend({
     async createUser(registerDto: RegisterDto): Promise<UserEntity> {
@@ -15,11 +17,18 @@ export const userRepository = postgres.getRepository(UserEntity).extend({
     async findByEmail(email: string): Promise<UserEntity | null> {
         return await this.findOneBy({email: email})
     },
-    async getUserWithVerificationCode(userId: string): Promise<UserEntity | null> {
+    async getUserWithVerificationCode(userId: string): Promise<{email: string, code: string} | null | undefined> {
         return await this.createQueryBuilder('u')
             .where('u.id=:userId', {userId: userId})
-            .leftJoinAndSelect('u.verificationCode', 'v')
-            .select(['u.email', 'v.code'])
-            .getOne()
+            .leftJoin(VerificationCodeEntity, 'v','v.userId=:userId',{userId: userId})
+            .select(['u.email as email','v.code as code'])
+            .getRawOne()
+    },
+    async verifyUser(userId: string) : Promise<UpdateResult> {
+        return this.createQueryBuilder('u')
+            .update(UserEntity)
+            .set({isVerified: true})
+            .where('id=:id',{id: userId})
+            .execute();
     }
 })

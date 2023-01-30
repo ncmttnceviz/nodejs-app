@@ -6,11 +6,9 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint . --ext .ts",
+    "compile": "tsc && node dist/src/main.js",
     "copy-files": "cp -r ./src/translations  ./dist/src",
-    "compile": "tsc && npm run copy-files && node ./dist/src/main.js",
-    "dev": "node_modules/.bin/nodemon -e ts --exec \"npm run compile\"",
-    "build": "tsc && npm run copy-files",
-    "start": "node ./dist/src/main.js"
+    "start": "node_modules/.bin/nodemon -e ts --exec \"npm run compile\""
   },
   "devDependencies": {
     "@types/amqplib": "^0.10.1",

@@ -1,21 +1,16 @@
 import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 
-export enum types {
-    phone = 'phone',
-    email = 'email'
-}
-
 @Entity('verification_codes')
 export class VerificationCodeEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
+    @Column({type:'uuid', unique: true})
     userId: string
-
-    @Column({type: "enum", enum: types})
-    verificationType: types
 
     @Column()
     code: string
+
+    @Column({type: "timestamp"})
+    expireDate: Date
 }
