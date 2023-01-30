@@ -12,7 +12,6 @@ import {userLogProcessor} from "@processor/user-log.processor";
 import {userLogService} from "@service/user-log.service";
 import {appHelper} from "@helper/app.helper";
 import {userTokenRepository} from "@repository/user-token.repository";
-import UserEntity from "@entity/user.entity";
 import {MailInterface} from "@interface/mail.interface";
 import {mailerService} from "@app/services/mailer.service";
 import {verificationCodeRepository} from "@repository/verification-code.repository";

@@ -14,7 +14,7 @@ class UserService {
                 from: process.env.MAIL_FROM!,
                 to: user.email,
                 subject: languageService.trans('verificationMail'),
-                text: languageService.trans('verificationCode') + user.code
+                text: languageService.trans('verificationCode') + ' ' + user.code
             }
 
             return mailerService.sendMail(data)

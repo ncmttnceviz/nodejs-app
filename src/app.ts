@@ -33,10 +33,12 @@ export class App {
 
         app.use(routesIndex);
         app.use(errorHandler)
+
+        process.env.TZ = 'Europe/Istanbul'
     }
 
 
-    async loadConfigs() {
+    async checkConfigs() {
         const connections = await Promise.all([
             postgresConnect(),
             mongoConnect(),
@@ -50,13 +52,10 @@ export class App {
     }
 
     async start() {
-        await this.loadConfigs();
+        await this.checkConfigs();
         const port = process.env.APP_PORT || 3000;
         this.app.listen(port, () => {
             console.log(`Server Running : http://localhost:${port}`)
         })
-
-       const user = await userRepository.getUserWithVerificationCode('8df217ec-b94d-4d1a-bf61-07d8c47bb2b4')
-        console.log(user)
     }
 }
